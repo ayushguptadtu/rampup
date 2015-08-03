@@ -4,32 +4,67 @@ var conf = require('./connection');
 
 var query={
 
-fetch : function(data)
+fetch : function(email, password,cb)
 {
-console.log(data);
-var q = 'SELECT * from users where email = "'+ data +'" ';
-console.log(q);
+//console.log(data);
+var q = 'SELECT name from users where email = ? and password = ?';
+console.log('q==',q);
 
-conf.query(q, function(err, rows) {
+conf.query(q,[email,password], function(err, rows) {
 //connection.end();
 //console.log(q);
-  if (!err)
+  if (!err) {
     console.log('The solution is: ', rows);
-  else
+    cb(null,rows); }
+  else  {
     console.log('Error while performing Query.');
+     cb(err,null); 
+      }
+    
 });
+//cb(rows);
+},
+
+check : function(email,cb)
+{
+	var Query = 'SELECT name from users where email = ?';
+	conf.query(Query,[email],function(err,rows){
+		//console.log('conf.query===',Query);
+		if(!err){
+			//console.log('The solution is : ',rows);
+			cb(null,rows);
+		}
+		else{
+			console.log('error while performing check');
+			cb(err,null);
+		}
+
+	});
+},
+
+insert : function(email, name, password,cb){
+	var quer = 'insert into users values(?,?,?)';
+	conf.query(quer,[name, email,password],function(err,rows){
+		if(!err){
+			console.log('insert successful ', email,name,password);
+            cb(null,rows);
+		}
+
+	});
 }
+
+
 };
 
 module.exports = query;
 
 
-/*
+
 (function () {
   if (require.main === module) {
     
 
-    quer.fun('ayush.gupta117@gmail.com');
+    query.insert('ayush.gupta117@gmail.com', 'ayush', 'ayush');
   }
 }());
-*/
+
