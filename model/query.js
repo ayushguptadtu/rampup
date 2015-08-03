@@ -25,6 +25,18 @@ conf.query(q,[email,password], function(err, rows) {
 //cb(rows);
 },
 
+update : function(email, password){
+  var updateQuery = 'update users set password = ? where email = ?';
+  conf.query(updateQuery,[password,email], function(err, rows){
+    if(!err){
+      console.log('new password is ', password);
+    }
+    else{
+      console.log('error while updating password');
+    }
+  });
+},
+
 check : function(email,cb)
 {
 	var Query = 'SELECT name from users where email = ?';

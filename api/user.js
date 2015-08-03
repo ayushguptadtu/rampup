@@ -1,24 +1,30 @@
 'use strict';
 var query = require('../model/query');
 var user = {
-	func: function(req, res, next) {
-    query.fetch(req.body.email,req.body.password,function(err,name)
-  	{
+	checkUser: function(email, password,cb) {
+    query.fetch(email,password,function(err,name){
       //	console.log(d);
       if(err) {
       	//alert('wrong email id');
       	console.log("err found!");
-      	res.render('index');}
-      	else if(name.length==0){
-      		res.render('nomatch');
-      	}
-      else {
-      	console.log("no error");
-      	res.render('home');
-      }
-      	
+        cb(err,null);}
+      	//res.render('index');}
+     // 	else if(name.length==0){
+      //		res.render('nomatch');
+     // 	}
+      //else {
+      	//console.log("no error");
+        //router.use(session({secret: 'ssshhhhh'}));
+      //	res.render('home');
+      //}
+      	else
+          cb(null,name);
   	});
   
+	},
+
+	changePassword: function(email,password){
+    query.update(email, password);
 	},
 
 
@@ -41,10 +47,11 @@ var user = {
 		    		//res.redirect('/');
 		    	}
 		    	else{
-		    		query.insert(email,name,password,function(err,row)
-		    	{
+		    		query.insert(email,name,password,function(err,row){
 		    		if (err) {console.log('error while inserting')};
-		    	});
+            
+            res.render('index');
+            });
 		    	}
 		    });
 
