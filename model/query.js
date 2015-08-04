@@ -4,13 +4,13 @@ var conf = require('./connection');
 
 var query={
 
-fetch : function(email, password,cb)
+fetchPassword : function(email,cb)
 {
 //console.log(data);
-var q = 'SELECT name from users where email = ? and password = ?';
+var q = 'SELECT password from users where email = ?';
 console.log('q==',q);
 
-conf.query(q,[email,password], function(err, rows) {
+conf.query(q,[email], function(err, rows) {
 //connection.end();
 //console.log(q);
   if (!err) {

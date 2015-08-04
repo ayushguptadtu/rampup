@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 * This line check Session existence.
 * If it existed will do some action.
 */
-    res.render('home');
+    res.redirect('/home');
     }
     else{
     res.render('index');
@@ -24,10 +24,12 @@ router.get('/', function(req, res, next) {
 
 router.post('/home',function(req,res){
   //if(sess.email) res.render('home');
-  user.checkUser(req.body.email, req.body.password,function(err, name){
+  if(req.session){
+    user.checkUser(req.body.email, req.body.password,function(err, name){
+    console.log("name==",name);
     if(err)
       res.render('index');
-    else if(name.length==0)
+    else if(!name)
       res.render('nomatch');
     else {
       sess=req.session;
@@ -36,7 +38,8 @@ router.post('/home',function(req,res){
         //router.use(session({secret: 'ssshhhhh'}));
       res.render('home');
     }
-  });
+    });
+  }  
 });
 
 router.post('/forgot',function(req, res, next) {

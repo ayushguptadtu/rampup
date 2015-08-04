@@ -1,13 +1,19 @@
 'use strict';
 var query = require('../model/query');
+var encrypt = require('./encryptPassword');
 var user = {
 	checkUser: function(email, password,cb) {
-    query.fetch(email,password,function(err,name){
+    //encrypt.cryptPassword(password, function(err,cryptedPassword){
+      //if(err) console.log(err);
+      //console.log(cryptedPassword);
+    query.fetchPassword(email,function(err,passwordFetched){ //passwordFetched has password now
       //	console.log(d);
       if(err) {
       	//alert('wrong email id');
       	console.log("err found!");
-        cb(err,null);}
+        cb(err,null);  
+      }
+
       	//res.render('index');}
      // 	else if(name.length==0){
       //		res.render('nomatch');
@@ -17,10 +23,18 @@ var user = {
         //router.use(session({secret: 'ssshhhhh'}));
       //	res.render('home');
       //}
-      	else
-          cb(null,name);
+
+      	else{
+          encrypt.comparePassword(password, passwordFetched[0].password, function(err,result){
+            console.log('result==',result);
+            if(err) console.log(err);
+            cb(null, result);
+          });
+        }
+          
   	});
-  
+    //});
+        
 	},
 
 	changePassword: function(email,password){
@@ -35,27 +49,31 @@ var user = {
 	save: function(req,res){
 		//res.render('signup');
 		var email = req.body.email, 
-		    name = req.body.name,
-		    password = req.body.password;
+		    name = req.body.name;
+    encrypt.cryptPassword(req.body.password, function(err,password){
+      if(err) console.log(err);
+      console.log(password);
 
-		    console.log('email======',email);
-		    query.check(email, function(err,rows){
+		    //password = req.body.password;
+
+		console.log('email======',email);
+		query.check(email, function(err,rows){
 		    	//
-		    	if(rows.length!==0)
-		    		{   console.log('rows==',rows);
-		    		res.render('exists');
-		    		//res.redirect('/');
-		    	}
-		    	else{
-		    		query.insert(email,name,password,function(err,row){
+		  if(rows.length!==0){
+        console.log('rows==',rows);
+		    res.render('exists');
+		   		//res.redirect('/');
+		  }
+		  else{
+		  	query.insert(email,name,password,function(err,row){
 		    		if (err) {console.log('error while inserting')};
             
             res.render('index');
             });
-		    	}
-		    });
+		  }
+		});
 
-		    
+		});   
 		// enter in db 
 
 		//res.redirect('/');
