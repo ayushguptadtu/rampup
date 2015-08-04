@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 * This line check Session existence.
 * If it existed will do some action.
 */
-    res.redirect('/home');
+    res.render('home');
     }
     else{
     res.render('index');
@@ -46,11 +46,14 @@ router.post('/forgot',function(req, res, next) {
   res.render('forgot');
 });
 
-router.post('/nodemailer',function(req,res){
-  nodemail(req.body.email);
-});
+router.get('/nodemail',nodemail.sendmail);
+  //nodemail(req.body.email);
+//});
 
-router.get('/changePassword',function(req,res){
+/*router.get('/changePassword',function(req,res){
+  res.render('newPassword');
+}); */
+router.get('/verify',nodemail.verify,function(req, res){
   res.render('newPassword');
 });
 

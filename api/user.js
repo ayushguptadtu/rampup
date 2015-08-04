@@ -37,8 +37,14 @@ var user = {
         
 	},
 
+  
+
 	changePassword: function(email,password){
-    query.update(email, password);
+    encrypt.cryptPassword(password, function(err,hashPassword){
+      if(err) console.log(err);
+      console.log(hashPassword);
+    query.update(email, hashPassword);
+  });
 	},
 
 
