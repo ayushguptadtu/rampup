@@ -26,17 +26,16 @@ router.post('/home',function(req,res){
   //if(sess.email) res.render('home');
   if(req.session){
     user.checkUser(req.body.email, req.body.password,function(err, name){
-    console.log("name==",name);
     if(err)
       res.render('index');
     else if(!name)
-      res.render('nomatch');
+      res.render('error',{message:'NO match'});
     else {
       sess=req.session;
       sess.email=req.body.email;
         //console.log("no error");
         //router.use(session({secret: 'ssshhhhh'}));
-      res.render('home');
+      res.redirect('/');
     }
     });
   }  
