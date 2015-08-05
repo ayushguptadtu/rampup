@@ -1,7 +1,6 @@
 'use strict';
 var query = require('../model/query');
 var encrypt = require('./encryptPassword');
-var validator = require("email-validator");
 var user = {
 	checkUser: function(email, password,cb) {
     //encrypt.cryptPassword(password, function(err,cryptedPassword){
@@ -56,11 +55,7 @@ var user = {
 	save: function(req,res){
 		//res.render('signup');
 		var email = req.body.email, 
-		    name = req.body.name,
-        emailCheck = validator.validate(email);
-        //console.log('emailCheck ==', emailCheck);
-    if(!emailCheck) res.render('error');
-
+		    name = req.body.name;
     encrypt.cryptPassword(req.body.password, function(err,password){
       if(err) console.log(err);
       console.log(password);
