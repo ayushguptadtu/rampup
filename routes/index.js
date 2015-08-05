@@ -29,7 +29,7 @@ router.post('/home',function(req,res){
     if(err)
       res.render('index');
     else if(!name)
-      res.render('error',{message:'NO match'});
+      res.render('error',{message:'Invalid username/password'});
     else {
       sess=req.session;
       sess.email=req.body.email;
