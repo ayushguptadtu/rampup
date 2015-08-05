@@ -25,11 +25,14 @@ router.get('/', function(req, res, next) {
 router.post('/home',function(req,res){
   //if(sess.email) res.render('home');
   if(req.session){
+    if (!req.body.email || !req.body.password) 
+      res.render('error',{message:'Username/password field cannot be left empty'});
+    else {
     user.checkUser(req.body.email, req.body.password,function(err, name){
     if(err)
       res.render('index');
     else if(!name)
-      res.render('error',{message:'NO match'});
+      res.render('error',{message:'Invalid username/password'});
     else {
       sess=req.session;
       sess.email=req.body.email;
@@ -39,6 +42,7 @@ router.post('/home',function(req,res){
     }
     });
   }  
+}
 });
 
 router.post('/forgot',function(req, res, next) {
