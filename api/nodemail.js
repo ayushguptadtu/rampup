@@ -21,14 +21,15 @@ var mailer ={
       if(err) {
         //alert('wrong email id');
         console.log("err found!");
-        cb(err,null);  
+        res.render('error',{message:'Invalid username'});
+        //cb(err,null);  
       }
       else{
   //var date = new Date();
-  var time = parseInt(new Date().getTime());
+  var time = parseInt(new Date().getTime()) + 300000;
   //console.log('time===',time);
   //console.log('time===',time+300000);
-  querydb.insertDate(req.query.to, time+300000);;
+  querydb.insertDate(req.query.to, time);
   userInfo=req.query.to+"&hash="+passwordFetched[0].password+"&date="+time;
   querydb.insertHash(req.query.to, userInfo);
   console.log("userInfo==",userInfo);
@@ -69,18 +70,21 @@ verify : function(req, res,next){
     console.log('hash===',req.query.hash);
     //console.log('date===',req.query.date);
     querydb.fetchPassword(req.query.id,function(err,passwordFetched){ //passwordFetched has password now
-      //  console.log(d);
+      //console.log("created_at",passwordFetched[0].created_at);
+      var dbtime = parseInt(passwordFetched[0].created_at);
+      console.log('dbtime==',dbtime);
+      console.log('req.query.date==',req.query.date);
       if(err) {
         //alert('wrong email id');
         console.log("err found!");
         next(); 
       }
-      else if((req.query.hash==passwordFetched[0].password) && (passwordFetched[0].created_at>req.query.date))
+      else if((req.query.hash==passwordFetched[0].password) && (newTime<req.query.date))
     {
         console.log("created_at",passwordFetched[0].created_at);
         console.log("email is verified");
         next();
-        //res.end("<h1>Email is been Successfully verified");
+        res.end("<h1>Email is been Successfully verified");
         
         //res.render(index);
     }

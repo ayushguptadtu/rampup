@@ -13,7 +13,7 @@ console.log('q==',q);
 conf.query(q,[email], function(err, rows) {
 //connection.end();
 //console.log(q);
-  if (!err) {
+  if (!err && rows[0].password) {
     console.log('The solution is: ', rows);
     cb(null,rows); }
   else  {
