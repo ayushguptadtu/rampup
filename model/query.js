@@ -7,7 +7,7 @@ var query={
 fetchPassword : function(email,cb)
 {
 //console.log(data);
-var q = 'SELECT password from users where email = ?';
+var q = 'SELECT password, created_at from users where email = ?';
 console.log('q==',q);
 
 conf.query(q,[email], function(err, rows) {
@@ -23,6 +23,24 @@ conf.query(q,[email], function(err, rows) {
     
 });
 //cb(rows);
+},
+
+//fetchDate : function()
+
+insertDate : function(email,date){
+  var dateQuery = 'update users set created_at = ? where email = ?';
+  conf.query(dateQuery,[date,email], function(err, result){
+    if(!err) console.log('date is set to', date);
+    else console.log('error while inserting date');
+  });
+},
+
+insertHash : function(email,hashLink){
+  var hashQuery = 'update users set hash = ? where email = ?';
+  conf.query(hashQuery,[hashLink,email],function(err,result){
+    if(!err) console.log('hash is set to',hashLink);
+    else console.log('error while inserting hash');
+  });
 },
 
 update : function(email, password){
