@@ -4,7 +4,8 @@ var router = express.Router();
 var user = require('../api/user');
 var nodemail = require('../api/nodemail');
 var sess; 
-
+var querydb = require('../model/query');
+var email,id;
 /* GET home page. */
 router.get('/', function(req, res, next) {
   sess=req.session;
@@ -36,6 +37,18 @@ router.post('/home',function(req,res){
     else {
       sess=req.session;
       sess.email=req.body.email;
+      email = sess.email;
+      console.log('email==',email);
+      querydb.fetchId(email, function(err, result){
+        if(!err){
+          console.log("result==",result);
+          //sess.id = result[0].id;
+          id = result[0].id;
+          console.log("id==",id);
+        }
+        else
+          console.log('error while fetching id');
+      });
         //console.log("no error");
         //router.use(session({secret: 'ssshhhhh'}));
       res.redirect('/');
@@ -48,6 +61,20 @@ router.post('/home',function(req,res){
 router.post('/forgot',function(req, res, next) {
   res.render('forgot');
 });
+
+router.post('/savePost',function(req,res){
+querydb.insertPost(id,req.body.status1,function(err){
+if(err) console.log('error');
+else{
+  querydb.fetchPost(id,function(err,result){
+    if(err) console.log('error');
+    else console.log('fetchPost==',result[0].post_data);
+  });
+}
+});
+
+});
+
 
 router.get('/nodemail',nodemail.sendmail);
   //nodemail(req.body.email);

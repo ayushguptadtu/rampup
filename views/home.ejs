@@ -1,7 +1,33 @@
-<p> hi you are logged in</p>
-<form method="get" action="/logout">
-<br>
-<br>
+<html>
+<head>
+  <title>Ayush Forum </title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+<div class = "row" style="height:80px;background:#544B67;" >
+<h1 style="margin-left:37%;color:#fff;font-family:monospace;">Ayush Forum </h1>
+</div>
+<div class="row" style="margin-top:20px">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+  <form method = "post" action = "/savePost" >
+  <div class="form-group">
+    <label for="exampleInputEmail1">Status</label>
+   <textarea class="form-control" rows="3"  id="status1" name="status1"></textarea>
+  </div>
+  <button type="button" class="btn btn-success" onClick="sendData()">Post</button>
+  </form>
+</div>
+  <div class="col-md-2"></div>
+</div>
+<script>
+function sendData(){
+var status = $("textarea#status1").val();
 
-<input type='submit' class="btn btn-default" id='submit' value='Logout'/>
-</form>
+  $.post( "/savePost", { status1: status } );
+}
+</script>
+
+</body>
+</html>

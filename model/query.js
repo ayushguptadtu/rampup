@@ -25,6 +25,37 @@ conf.query(q,[email], function(err, rows) {
 //cb(rows);
 },
 
+fetchId : function(email, cb){
+  var idQuery = 'SELECT id from users where email = ?';
+  conf.query(idQuery, [email], function(err,rows){
+    if(!err)
+      cb(null,rows);
+    else
+      cb(err,null);
+  });
+},
+
+fetchPost : function(uid,cb){
+  var fetchPostQuery = 'SELECT post_data from posts where uid = ?';
+  conf.query(fetchPostQuery, [uid], function(err,result){
+    if(!err)
+      cb(null,result);
+  });
+},
+
+insertPost : function(uid,post,cb){
+  var postQuery = 'update posts set post_data = ? where uid = ?';
+  conf.query(postQuery,[post,uid],function(err,rows){
+    if(err) {
+      console.log('error while inserting post');
+      cb(err);
+    }
+    else {console.log('no error while inserting post in',uid,post);
+        cb(null);
+       }
+  });
+},
+
 //fetchDate : function()
 
 insertDate : function(email,date){

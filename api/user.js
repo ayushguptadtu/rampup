@@ -51,7 +51,10 @@ var user = {
 
 	signup: function(req,res){
 		res.render('signup');
-	},
+	}, 
+ 
+  /*savepost : function(req,res){
+  console.log(req.body.status1); */
 
 	save: function(req,res){
 		//res.render('signup');
