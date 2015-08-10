@@ -36,7 +36,7 @@ fetchId : function(email, cb){
 },
 
 fetchPost : function(uid,cb){
-  var fetchPostQuery = 'SELECT post_data from posts where uid = ?';
+  var fetchPostQuery = 'SELECT post_data from posts where uid = ? ORDER BY id  DESC lIMIT 0,5';
   conf.query(fetchPostQuery, [uid], function(err,result){
     if(!err)
       cb(null,result);
@@ -44,8 +44,8 @@ fetchPost : function(uid,cb){
 },
 
 insertPost : function(uid,post,cb){
-  var postQuery = 'update posts set post_data = ? where uid = ?';
-  conf.query(postQuery,[post,uid],function(err,rows){
+  var postQuery = 'insert into posts (uid,post_data) values (?,?);';
+  conf.query(postQuery,[uid,post],function(err,rows){
     if(err) {
       console.log('error while inserting post');
       cb(err);

@@ -3,25 +3,30 @@ var express = require('express');
 var router = express.Router();
 var user = require('../api/user');
 var nodemail = require('../api/nodemail');
-var sess; 
+var sess,posts1; 
 var querydb = require('../model/query');
 var email,id;
 /* GET home page. */
 router.get('/', function(req, res, next) {
   sess=req.session;
 //Session set when user Request our app via URL  
-  if(sess.email){
+  if(sess.email)
 /*
 * This line check Session existence.
 * If it existed will do some action.
-*/
-    res.render('home');
-    }
-    else{
-    res.render('index');
-    }
-});
- 
+*/ { console.log('id==',id);
+     querydb.fetchPost(id,function(err,result){ 
+      console.log('fetchPost==',result);
+      if(result)
+        res.render('home',{email: sess.email,result:result});//,post:result});}
+      });
+   }
+  else
+        res.render('index');
+    });
+  
+ // }
+
 
 router.post('/home',function(req,res){
   //if(sess.email) res.render('home');
@@ -42,7 +47,7 @@ router.post('/home',function(req,res){
       querydb.fetchId(email, function(err, result){
         if(!err){
           console.log("result==",result);
-          //sess.id = result[0].id;
+          //sess.id = s;
           id = result[0].id;
           console.log("id==",id);
         }
@@ -63,16 +68,20 @@ router.post('/forgot',function(req, res, next) {
 });
 
 router.post('/savePost',function(req,res){
-querydb.insertPost(id,req.body.status1,function(err){
-if(err) console.log('error');
-else{
-  querydb.fetchPost(id,function(err,result){
-    if(err) console.log('error');
-    else console.log('fetchPost==',result[0].post_data);
+  querydb.insertPost(id,req.body.status1,function(err){
+    if(err) {
+      console.log('error');
+    }
+    else {
+       querydb.fetchPost(id,function(err,result){ 
+      console.log('fetchPost==',result,result[0].post_data);
+      var n1 = result[0].post_data.toString();
+      if(result)
+        res.render('status',{result:result});//,post:result});}
+      });
+      console.log(req.body.status1);
+    }
   });
-}
-});
-
 });
 
 

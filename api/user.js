@@ -79,6 +79,7 @@ var user = {
 		   		//res.redirect('/');
 		  }
 		  else{
+        console.log('hi',email,name,password);
 		  	query.insert(email,name,password,function(err,row){
 		    		if (err) {console.log('error while inserting')};
             

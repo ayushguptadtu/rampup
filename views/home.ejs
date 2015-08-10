@@ -6,12 +6,17 @@
 </head>
 <body>
 <div class = "row" style="height:80px;background:#544B67;" >
+
+<span style="margin-left:30px;color:#fff;margin-top:2%;float:left"><%=email %></span>
 <h1 style="margin-left:37%;color:#fff;font-family:monospace;">Ayush Forum </h1>
+ <form method=get action="/logout">
+ <input type="submit" value = "Log Out" class="btn btn-primary" style="margin-top:2%;float:right;margin-right:30px" />
+ </form>
 </div>
 <div class="row" style="margin-top:20px">
   <div class="col-md-2"></div>
   <div class="col-md-8">
-  <form method = "post" action = "/savePost" >
+  <form method = "post"  >
   <div class="form-group">
     <label for="exampleInputEmail1">Status</label>
    <textarea class="form-control" rows="3"  id="status1" name="status1"></textarea>
@@ -21,13 +26,38 @@
 </div>
   <div class="col-md-2"></div>
 </div>
+
+<!--<div class="row">
+ <% posts1 = ""%>
+<%= (posts1) ? posts1 : '' %>
+
+</div>
+------>
 <script>
+//function logout(){
+//  $.get("http://localhost:3000/logout");
+//}
 function sendData(){
 var status = $("textarea#status1").val();
+ 
+ 
+  $.post( " http://localhost:3000/savePost", { status1: status },function(data){
+//var gg =  $("div.result").html();
+  //gg =  $("div.result").append(data);
+     $("#ayush").html(data) ;
 
-  $.post( "/savePost", { status1: status } );
+
+  });
 }
 </script>
+<div class="result" style="height:40px;margin-left:17%;width:850px;background: rgba(180, 209, 228, 0.27);">
 
+
+<p>
+<%- include status.ejs %>
+
+</p></div>
+
+</div>
 </body>
 </html>
